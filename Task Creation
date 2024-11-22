@@ -1,0 +1,11 @@
+//Create a Task When Opportunity is Won
+trigger ThanksgivingOpportunityTrigger on Opportunity (before insert) {
+    List<Task> taskList= new List<Task>();
+    for(Opportunity opp : [SELECT id, Name like 'Thanksgiving' FROM Opportunity WHERE StageName = 'Closed Won' and id IN : Trigger.New])
+    { taskList.add(new Task(Subject= 'Arrange a Party', WhatId = opp.Id));
+}
+    if (taskList.size()>0){
+        insert taskList;
+    }
+
+}
